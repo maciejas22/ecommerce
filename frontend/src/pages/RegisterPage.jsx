@@ -62,7 +62,7 @@ const RegisterPage = () => {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={registerUser}>
+        <form onSubmit={(e) => registerUser(e)}>
           <TextInput
             label="Fist name"
             name="first_name"

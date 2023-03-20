@@ -20,21 +20,53 @@ import NotFound from "./pages/NotFound";
 import PrivateRoute from "./utils/PrivateRoute";
 import { AuthProvider } from "./context/AuthProvider";
 
+const categories = [
+  { name: "TVs", slug: "tvs" },
+  { name: "Audio", slug: "audio" },
+  { name: "Smartphones", slug: "smartphones" },
+  { name: "Computers", slug: "computers" },
+  { name: "Consoles and games", slug: "consoles-and-games" },
+  { name: "Fridges", slug: "fridges" },
+  { name: "Microwaves", slug: "microwaves" },
+  { name: "Washing machines", slug: "washing-machines" },
+];
+
 const unprotectedLinks = [
   { name: "Home", url: "/", element: <MainPage /> },
-  { name: "Login", url: "/login", element: <LoginPage /> },
-  { name: "Register", url: "/register", element: <RegisterPage /> },
-  { name: "Category", url: "/:category", element: <CategoryPage /> },
   { name: "Contact", url: "/contact", element: <ContactPage /> },
   {
     name: "Policies",
     url: "/terms-and-conditions",
     element: <PoliciesPage />,
   },
+  ...categories.map((category) => ({
+    name: category.name,
+    url: category.slug,
+    element: (
+      <CategoryPage categoryName={category.name} categorySlug={category.slug} />
+    ),
+  })),
 ];
 
 const protectedLinks = [
-  { name: "Account", url: "/account", element: <AccountPage /> },
+  {
+    name: "Login",
+    url: "/login",
+    element: <LoginPage />,
+    permissions: "anonymousUser",
+  },
+  {
+    name: "Register",
+    url: "/register",
+    element: <RegisterPage />,
+    permissions: "anonymousUser",
+  },
+  {
+    name: "Account",
+    url: "/account",
+    element: <AccountPage />,
+    permissions: "authUser",
+  },
 ];
 
 function App() {
@@ -55,7 +87,10 @@ function App() {
       >
         <BrowserRouter>
           <AuthProvider>
-            <AppShell header={<MyHeader />} footer={<Footer />}>
+            <AppShell
+              header={<MyHeader categories={categories} />}
+              footer={<Footer />}
+            >
               <Routes>
                 {unprotectedLinks.map((link) => (
                   <Route
@@ -69,7 +104,11 @@ function App() {
                   <Route
                     key={link.name}
                     path={link.url}
-                    element={<PrivateRoute>{link.element}</PrivateRoute>}
+                    element={
+                      <PrivateRoute permissions={link.permissions}>
+                        {link.element}
+                      </PrivateRoute>
+                    }
                     errorElement={<ErrorPage />}
                   />
                 ))}

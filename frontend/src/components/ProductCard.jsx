@@ -1,15 +1,27 @@
+import { useState } from "react";
+
 import { Card, Text, Image, Button, Group } from "@mantine/core";
 import { IconShoppingCartPlus } from "@tabler/icons-react";
 
 const ProductCard = ({ img, name, price, discount }) => {
+  const [variant, setVariant] = useState("outline");
+
+  const handleMouseEnter = () => {
+    setVariant("filled");
+  };
+
+  const handleMouseLeave = () => {
+    setVariant("outline");
+  };
+
   return (
-    <Card shadow="xl" withBorder radius="md" width={220} my="xs">
+    <Card shadow="xl" withBorder radius="md" width={220} py="lg">
       <Card.Section
+        py="sm"
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: "10px",
         }}
       >
         <Image
@@ -26,9 +38,15 @@ const ProductCard = ({ img, name, price, discount }) => {
         {name}
       </Text>
 
-      <Group position="apart">
+      <Group position="apart" py="sm">
         <ProductPrice price={price} discount={discount} />
-        <Button variant="outline" size="xs" radius="xl">
+        <Button
+          variant={variant}
+          size="xs"
+          radius="xl"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <IconShoppingCartPlus size={20} stroke={1.5} />
         </Button>
       </Group>

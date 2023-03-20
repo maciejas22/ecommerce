@@ -6,7 +6,9 @@ import ProductCard from "../components/ProductCard";
 const FiveItemCarousel = ({ title, items }) => {
   return (
     <Container size="xl">
-      <Title order={1}>{title}</Title>
+      <Title order={1} py="sm">
+        {title}
+      </Title>
       <Carousel
         withIndicators
         loop

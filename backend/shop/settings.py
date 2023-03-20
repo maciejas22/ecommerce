@@ -27,6 +27,7 @@ SECRET_KEY = "django-insecure-_0ue(@u43+^!%dd958evffn1kw!zk^#bt#&gb%-ca6fc1vn(-v
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '*',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "authentication",
-    # "product",
+    "product",
 ]
 
 REST_FRAMEWORK = {
@@ -58,7 +59,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,

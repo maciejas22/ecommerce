@@ -12,8 +12,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        token["first_name"] = user.first_name
-        token["last_name"] = user.last_name
         token["username"] = user.username
         token["email"] = user.email
 
@@ -32,7 +30,7 @@ class CitySerializer(serializers.ModelSerializer):
         fields = ("name", "postal_code", "country")
 
 class AddressSerializer(serializers.ModelSerializer):
-    city = CitySerializer()
+    city = CitySerializer(required=False)
 
     class Meta:
         model = Address
@@ -47,33 +45,43 @@ class AddressSerializer(serializers.ModelSerializer):
         return address
 
 class ProfileSerializer(serializers.ModelSerializer):
-    address = AddressSerializer()
-
-    username = serializers.CharField(
-        required=True, validators=[UniqueValidator(queryset=Profile.objects.all())]
-    )
-
-    email = serializers.EmailField(
-        required=True, validators=[UniqueValidator(queryset=Profile.objects.all())]
-    )
-
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
-    password2 = serializers.CharField(write_only=True, required=True)
+    address = AddressSerializer(required=False)
 
     class Meta:
         model = Profile
-        fields = ("id", "first_name", "last_name", "username", "email", "password", "password2", "address")
-
-    def validate(self, attrs):
-        if attrs["password"] != attrs["password2"]:
-            raise serializers.ValidationError({"password": "Passwords must match."})
-
-        return attrs
+        fields = ("first_name", "last_name", "username", "email", "password", "address")
+        extra_kwargs = {
+            "username": {"required": True, "validators": [UniqueValidator(queryset=Profile.objects.all())]},
+            "email": {"required": True, "validators": [UniqueValidator(queryset=Profile.objects.all())]},
+            "password": {"required": True, "write_only": True},
+        }
 
     def create(self, validated_data):
-        validated_data.pop("password2")
-        user = Profile.objects.create_user(**validated_data)
-        return user
+        password = validated_data.pop("password")
+        address_data = validated_data.pop("address", None)
+        profile = Profile.objects.create(**validated_data)
+        profile.set_password(password)
+        if address_data:
+            address = AddressSerializer.create(AddressSerializer(), address_data)
+            profile.address = address
+        profile.save()
+        return profile
+    
+    def update(self, instance, validated_data):
+        address_data = validated_data.pop("address", None)
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        if address_data:
+            address = AddressSerializer.create(AddressSerializer(), address_data)
+            instance.address = address
+        instance.save()
+        return instance
 
+    def get_extra_kwargs(self):
+        extra_kwargs = super().get_extra_kwargs()
+        if self.context['request'].method != "POST":
+            extra_kwargs["username"]["required"] = False
+            extra_kwargs["email"]["required"] = False
+            extra_kwargs["password"]["required"] = False
+        return extra_kwargs
+    

@@ -18,7 +18,7 @@ import SearchBar from "./SearchBar";
 import User from "./User";
 import Categories from "./Categories";
 
-const MyHeader = () => {
+const MyHeader = ({ categories }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -49,7 +49,7 @@ const MyHeader = () => {
 
         <Container size="xl">
           <Group px="md" position="apart">
-            <Categories />
+            <Categories categories={categories} />
           </Group>
         </Container>
       </Header>
@@ -77,7 +77,7 @@ const MyHeader = () => {
 
         <Drawer opened={opened} onClose={close}>
           <Flex direction="column" align="flex-start">
-            <Categories closeDrawer={close} />
+            <Categories categories={categories} closeDrawer={close} />
           </Flex>
         </Drawer>
       </Header>

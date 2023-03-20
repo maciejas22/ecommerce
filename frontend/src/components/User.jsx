@@ -19,13 +19,16 @@ import {
   IconPencil,
   IconUser,
 } from "@tabler/icons-react";
+import jwt_decode from "jwt-decode";
 
 import AuthContext from "../context/AuthProvider";
 
 const User = ({ width }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const { user } = useContext(AuthContext);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const { authTokens } = useContext(AuthContext);
+
+  const user = authTokens ? jwt_decode(authTokens.access) : null;
 
   return (
     <Menu
@@ -65,7 +68,7 @@ const User = ({ width }) => {
 const LoggedUserAvatar = (user, width) => {
   return (
     <>
-      <Avatar src={null} alt={user.name} radius="xl" size={20} />
+      <Avatar src={null} alt={user.username} radius="xl" size={20} />
       {width > 768 ? (
         <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
           {user.username}

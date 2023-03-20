@@ -39,7 +39,7 @@ const LoginPage = () => {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={loginUser}>
+        <form onSubmit={(e) => loginUser(e)}>
           <TextInput
             label="Username"
             name="username"

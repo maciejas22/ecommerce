@@ -1,26 +1,38 @@
+import { useState, useEffect } from "react";
+
 import { Container, Group, Title, Select, SimpleGrid } from "@mantine/core";
 import { IconArrowsSort } from "@tabler/icons-react";
-import { useParams } from "react-router-dom";
 
 import ProductCard from "../components/ProductCard";
-import img from "../assets/donwload.png";
 
-const CategoryPage = () => {
-  const { category } = useParams();
+const fetchItems = async (slug) => {
+  const response = await fetch(`http://localhost:8000/api/${slug}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.json();
+  return data;
+};
 
-  let items = [
-    { img: img, name: "Iphone 14 pro", price: "999", discount: "0" },
-    { img: img, name: "Iphone 14 pro Max", price: "1099", discount: "0" },
-    { img: img, name: "Iphone 14", price: "999", discount: "0" },
-    { img: img, name: "Iphone 14 Max", price: "999", discount: "100" },
-    { img: img, name: "Iphone 14 Max", price: "999", discount: "0" },
-  ];
+const CategoryPage = ({ categoryName, categorySlug }) => {
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(null);
 
-  return (
+  useEffect(() => {
+    setLoading(true);
+    fetchItems(categorySlug).then((data) => {
+      setItems(data);
+      setLoading(false);
+    });
+  }, [categorySlug]);
+
+  return loading ? null : (
     <>
       <Container size="xl">
         <Group
-          py={10}
+          py="sm"
           position="center"
           sx={{
             width: "100%",
@@ -34,7 +46,7 @@ const CategoryPage = () => {
             },
           }}
         >
-          <Title order={1}>{category}</Title>
+          <Title order={1}>{categoryName}</Title>
           <Select
             placeholder="Sort by"
             icon={<IconArrowsSort />}
