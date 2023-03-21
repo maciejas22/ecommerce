@@ -1,8 +1,10 @@
 import { TextInput, ActionIcon } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useSearchParams } from "react-router-dom";
 import { IconSearch } from "@tabler/icons-react";
 
 const SearchBar = ({ widthPercentage, padding }) => {
+  const [search, setSearch] = useSearchParams();
   const form = useForm({
     initialValues: {
       searchQuery: "",
@@ -11,7 +13,10 @@ const SearchBar = ({ widthPercentage, padding }) => {
 
   return (
     <form
-      onSubmit={form.onSubmit((values) => console.log(values.searchQuery))}
+      onSubmit={(e) => {
+        e.preventDefault();
+        setSearch({ search: form.values.searchQuery });
+      }}
       style={{ width: widthPercentage, padding: padding }}
     >
       <TextInput

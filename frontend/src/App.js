@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { MantineProvider, ColorSchemeProvider, AppShell } from "@mantine/core";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useSearchParams,
+} from "react-router-dom";
 
 import "./App.css";
 import MyHeader from "./components/MyHeader";
 import Footer from "./components/Footer";
 import MainPage from "./pages/MainPage";
+import SearchResults from "./pages/SearchResults";
 import CategoryPage from "./pages/CategoryPage";
 import AccountPage from "./pages/AccountPage";
 import LoginPage from "./pages/LoginPage";
@@ -33,6 +39,7 @@ const categories = [
 
 const unprotectedLinks = [
   { name: "Home", url: "/", element: <MainPage /> },
+  { name: "Serach", url: "/search", element: <SearchResults /> },
   { name: "Contact", url: "/contact", element: <ContactPage /> },
   {
     name: "Policies",
