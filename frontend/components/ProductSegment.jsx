@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 import { Container, Group, Title, Select, SimpleGrid } from "@mantine/core";
 

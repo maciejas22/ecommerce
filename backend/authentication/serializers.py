@@ -1,11 +1,10 @@
 from django.contrib.auth.password_validation import validate_password
-
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Profile, Address, City, Country
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -17,10 +16,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return token
 
+
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
         fields = ("name",)
+
 
 class CitySerializer(serializers.ModelSerializer):
     country = CountrySerializer()
@@ -29,13 +30,14 @@ class CitySerializer(serializers.ModelSerializer):
         model = City
         fields = ("name", "postal_code", "country")
 
+
 class AddressSerializer(serializers.ModelSerializer):
     city = CitySerializer(required=False)
 
     class Meta:
         model = Address
         fields = ("street", "number", "apartment_number", "city")
-    
+
     def create(self, validated_data):
         city_data = validated_data.pop("city")
         country_data = city_data.pop("country")
@@ -43,6 +45,7 @@ class AddressSerializer(serializers.ModelSerializer):
         city, _ = City.objects.get_or_create(country=country, **city_data)
         address, _ = Address.objects.get_or_create(city=city, **validated_data)
         return address
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     address = AddressSerializer(required=False)
@@ -66,7 +69,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             profile.address = address
         profile.save()
         return profile
-    
+
     def update(self, instance, validated_data):
         address_data = validated_data.pop("address", None)
         for key, value in validated_data.items():
@@ -84,4 +87,3 @@ class ProfileSerializer(serializers.ModelSerializer):
             extra_kwargs["email"]["required"] = False
             extra_kwargs["password"]["required"] = False
         return extra_kwargs
-    

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import Link from "next/link";
+
 import {
   Header,
   Button,
@@ -41,9 +43,11 @@ const MyHeader = () => {
             <SearchBar widthPercentage={"40%"} padding={"0"} />
 
             <Group>
-              <Button variant="outline">
-                <IconShoppingCart size={20} stroke={1.5} />
-              </Button>
+              <Link href="/cart/">
+                <Button variant="outline">
+                  <IconShoppingCart size={20} stroke={1.5} />
+                </Button>
+              </Link>
 
               <User width={windowWidth} />
             </Group>
@@ -79,9 +83,11 @@ const MyHeader = () => {
         >
           <Burger opened={opened} onClick={open} />
           <Group>
-            <Button variant="outline">
-              <IconShoppingCart size={20} stroke={1.5} />
-            </Button>
+            <Link href="/cart/">
+              <Button variant="outline">
+                <IconShoppingCart size={20} stroke={1.5} />
+              </Button>
+            </Link>
             <User width={windowWidth} />
           </Group>
         </Flex>

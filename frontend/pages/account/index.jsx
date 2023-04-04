@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect, useContext } from "react";
 
 import { IconUser, IconKey, IconBell, IconHome } from "@tabler/icons-react";

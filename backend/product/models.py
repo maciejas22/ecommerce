@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Category(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField()
@@ -30,4 +31,4 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return f'/{self.category.slug}/{self.slug}/' 
+        return f'/{self.category.slug}/{self.slug}/'
