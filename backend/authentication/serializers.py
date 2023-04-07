@@ -87,3 +87,20 @@ class ProfileSerializer(serializers.ModelSerializer):
             extra_kwargs["email"]["required"] = False
             extra_kwargs["password"]["required"] = False
         return extra_kwargs
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = Profile
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+    def validate(self, attrs):
+        if self.context['request'].user.check_password(attrs['old_password']):
+            return attrs
+        else:
+            raise serializers.ValidationError({"old_password": ["Wrong password."]})

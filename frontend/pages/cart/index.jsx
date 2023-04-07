@@ -1,37 +1,32 @@
-import {useState, useEffect} from "react";
+import dynamic from "next/dynamic";
+import {useContext, useEffect, useState} from "react";
 
-import {Title, Flex, Group, Button, Text, Grid, Container} from "@mantine/core";
+import {Container, Title} from "@mantine/core";
+import AuthContext from "@/context/AuthProvider";
+import CartContext from "@/context/CartProvider";
+import MyLoader from "@/components/MyLoader";
 
-import Item from "@/components/Cart/Item";
-import ItemMobile from "@/components/Cart/ItemMobile";
-
-const mockData = [
-    {img: null, name: "Item 1", price: 10, discount: 5, quantity: 1},
-    {img: null, name: "Item 2", price: 20, discount: 10, quantity: 2},
-    {img: null, name: "Item 3", price: 30, discount: 15, quantity: 3},
-    {img: null, name: "Item 4", price: 40, discount: 0, quantity: 4},
-];
-
-const index = () => {
-    const [windowWidth, setWindowWidth] = useState(9999);
-    const [items, setItems] = useState(mockData);
-
-    const handleQuantityChange = (index, value) => {
-        const newItems = [...items];
-        newItems[index].quantity = value;
-        setItems(newItems);
-    };
+const ItemSegment = dynamic(() => import("@/components/Cart/ItemSegment"), {ssr: false, loading: () => <MyLoader/>,});
+const Index = () => {
+    const [loading, setLoading] = useState(true);
+    const {authTokens} = useContext(AuthContext);
+    const {items, getCart, addItem, updateQuantity, deleteItem,} = useContext(CartContext);
 
     useEffect(() => {
-        const handleResize = () => {
-            if (typeof window !== "undefined") {
-                setWindowWidth(window.innerWidth);
+        setLoading(true);
+        const fetchItems = async () => {
+            try {
+                await getCart();
+            } catch (error) {
+                console.log(error);
             }
         };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+
+        if (authTokens) {
+            fetchItems();
+            setLoading(false);
+        }
+    }, [authTokens]);
 
     return (
         <Container size="xl"
@@ -43,46 +38,14 @@ const index = () => {
                    }}
         >
             <Title order={1}>Cart:</Title>
-            <Grid>
-                <Grid.Col md={8} span={12}>
-                    {items.map((item, index) => (
-                        windowWidth < 1080 ? (
-                            <ItemMobile
-                                key={index}
-                                index={index}
-                                {...item}
-                                onQuantityChange={handleQuantityChange}
-                            />
-                        ) : (
-                            <Item
-                                key={index}
-                                index={index}
-                                {...item}
-                                onQuantityChange={handleQuantityChange}
-                            />
 
-                    )))}
-                </Grid.Col>
-
-                <Grid.Col md={4} span={12} py={5}>
-                    <Flex direction="column">
-                        <Group position="apart">
-                            <Text fz="xl">Subtotal:</Text>
-                            <Text fz="xl">
-                                {items.reduce(
-                                    (acc, item) =>
-                                        acc + (item.price - item.discount) * item.quantity,
-                                    0
-                                )}
-                                $
-                            </Text>
-                        </Group>
-                        <Button>Pay</Button>
-                    </Flex>
-                </Grid.Col>
-            </Grid>
+            {loading ? null : <ItemSegment items={items}
+                                           addItem={addItem}
+                                           updateQuantity={updateQuantity}
+                                           deleteItem={deleteItem}/>
+            }
         </Container>
     );
 };
 
-export default index;
+export default Index;

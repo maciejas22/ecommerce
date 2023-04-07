@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {ActionIcon, Flex, Group, Image, Select, Text} from "@mantine/core";
+import {Button, Flex, Group, Image, Select, Text} from "@mantine/core";
 import {IconTrash} from "@tabler/icons-react";
 
 const ProductPrice = ({price, discount}) => {
@@ -7,7 +7,7 @@ const ProductPrice = ({price, discount}) => {
         return (
             <Group spacing="xs">
                 <Text size="md" weight={500}>
-                    {price - discount}$
+                    {(price - discount).toFixed(2)}$
                 </Text>
                 <Text size="md" weight={500} c="dimmed" td="line-through">
                     {price}$
@@ -17,26 +17,31 @@ const ProductPrice = ({price, discount}) => {
     } else {
         return (
             <Text size="md" weight={500}>
-                {price}$
+                {price.toFixed(2)}$
             </Text>
         );
     }
 };
 export default function ItemMobile({
                                        index,
+                                       id,
                                        img,
                                        name,
                                        price,
                                        discount,
                                        quantity,
-                                       onQuantityChange,
+                                       updateQuantity,
+                                       deleteItem
                                    }) {
-    const [windowWidth, setWindowWidth] = useState();
     const [value, setValue] = useState(quantity);
 
-    const handleQuantityChange = (newValue) => {
+    const handleQuantityChange = (id, newValue) => {
         setValue(newValue);
-        onQuantityChange(index, parseInt(newValue));
+        updateQuantity(id, parseInt(newValue));
+    };
+
+    const handleDelete = (id) => {
+        deleteItem(id);
     };
 
     return (
@@ -55,16 +60,16 @@ export default function ItemMobile({
             }}>
                 <Group position="apart">
                     <Text>{name}</Text>
-                    <ActionIcon size={42} variant="default">
+                    <Button size='md' variant='outline' onClick={() => handleDelete(id)}>
                         <IconTrash size={22} stroke={1.5}/>
-                    </ActionIcon>
+                    </Button>
                 </Group>
 
                 <Group position="apart">
                     <Select
                         data={["1", "2", "3", "4", "5", "6", "7", "8", "9"]}
                         value={value.toString()}
-                        onChange={(newValue) => handleQuantityChange(newValue)}
+                        onChange={(newValue) => handleQuantityChange(id, newValue)}
                         size="md"
                         style={{width: 80}}
                     />
