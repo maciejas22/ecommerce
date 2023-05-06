@@ -1,45 +1,28 @@
-import {createContext, useContext, useState} from "react";
-import axios from "axios";
-import AuthContext from "@/context/AuthProvider";
+import {createContext, useState} from "react";
+
+import useAxios from "@/utils/useAxios";
 
 const CartContext = createContext();
-
 export default CartContext;
 
 export const CartProvider = ({children}) => {
-    const {authTokens} = useContext(AuthContext);
+    const api = useAxios();
     const [items, setItems] = useState([]);
     const getHistory = async () => {
-        const response = await axios.get("http://localhost:8000/api/order/list-create-cart/", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authTokens.access}`
-            }
-        }).then((response) => {
-            return response.data;
-        }).catch((error) => {
-            console.log(error);
-            return null;
-        });
-
-        return response;
+        return await api
+            .get("order/list-create-cart/")
+            .then((response) => {
+                return response.data;
+            });
     };
 
     const getCart = async () => {
-        const response = await axios.get("http://localhost:8000/api/order/get-cart/", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authTokens.access}`
-            }
-        }).then((response) => {
-            setItems(response.data.items)
-            return response.data;
-        }).catch((error) => {
-            console.log(error);
-            return null;
-        });
-
-        return response;
+        return await api
+            .get("order/get-cart/")
+            .then((response) => {
+                setItems(response.data.items)
+                return response.data;
+            });
     };
 
     const updateQuantity = async (item_id, quantity) => {
@@ -47,57 +30,33 @@ export const CartProvider = ({children}) => {
             "quantity": quantity
         }
 
-        const response = await axios.put(`http://localhost:8000/api/order/update-cart/${item_id}/`, JSON.stringify(body), {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authTokens.access}`
-            }
-        }).then((response) => {
-            setItems(response.data.items)
-            return response.data;
-        }).catch((error) => {
-            console.log(error);
-            return null;
-        });
-
-        return response;
+        return await api
+            .put(`order/update-cart/${item_id}/`, JSON.stringify(body))
+            .then((response) => {
+                setItems(response.data.items)
+                return response.data;
+            });
     };
 
     const deleteItem = async (item_id) => {
-        const response = await axios.delete(`http://localhost:8000/api/order/update-cart/${item_id}/`, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authTokens.access}`
-            }
-        }).then((response) => {
-            setItems(response.data.items)
-            return response.data;
-        }).catch((error) => {
-            console.log(error);
-            return null;
-        });
-
-        return response;
+        return await api
+            .delete(`order/update-cart/${item_id}/`)
+            .then((response) => {
+                setItems(response.data.items)
+                return response.data;
+            });
     };
 
     const addItem = async (product_id) => {
         const body = {
             "id": product_id,
         }
-        const response = await axios.post(`http://localhost:8000/api/order/get-cart/`, JSON.stringify(body), {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authTokens.access}`
-            }
-        }).then((response) => {
-            setItems(response.data.items)
-            return response.data;
-        }).catch((error) => {
-            console.log(error);
-            return null;
-        });
-
-        return response;
+        return await api
+            .post(`order/get-cart/`, JSON.stringify(body))
+            .then((response) => {
+                setItems(response.data.items)
+                return response.data;
+            });
     };
 
     const contextData = {

@@ -1,30 +1,65 @@
-import {useContext} from "react";
-
 import {Button, Container, Divider, Flex, PasswordInput, Space, Title,} from "@mantine/core";
 import {useForm} from "@mantine/form";
-
-import AuthContext from "../../context/AuthProvider";
+import {notifications} from "@mantine/notifications";
+import useAxios from "@/utils/useAxios";
+import {myJSONformatter} from "@/utils/myJSONformatter";
 
 const ChangePassword = () => {
-    const {changeUserPassword} = useContext(AuthContext);
-
+    const api = useAxios();
     const form = useForm({
         initialValues: {
-            oldPassword: "",
-            newPassword: "",
+            old_password: "",
+            new_password: "",
             confirmNewPassword: "",
         },
         validate: {
-            newPassword: (value, values) => {
+            new_password: (value, values) => {
                 if (value.length < 8) {
-                    return "Password must be at least 2 characters";
+                    return "Password must be at least 8 characters";
+                }
+                if (value === values.old_password) {
+                    return "New password must be different from the old one";
                 }
                 if (value !== values.confirmNewPassword) {
                     return "Passwords do not match";
                 }
             },
+            confirmNewPassword: (value, values) => {
+                if (value.length < 8) {
+                    return "Password must be at least 8 characters";
+                }
+                if (value === values.old_password) {
+                    return "New password must be different from the old one";
+                }
+                if (value !== values.new_password) {
+                    return "Passwords do not match";
+                }
+            }
         },
     });
+    const changeUserPassword = async (form, values) => {
+        const body = {
+            old_password: values.old_password,
+            new_password: values.new_password,
+        }
+
+        return await api
+            .put("profile/update_password/", JSON.stringify(body))
+            .then((response) => {
+                notifications.show({
+                    title: "Success",
+                    message: 'Password changed successfully',
+                    color: "green",
+                })
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    let data = myJSONformatter(error.response.data);
+                    form.setErrors(data);
+                }
+            });
+    }
+
 
     return (
         <Container>
@@ -37,7 +72,7 @@ const ChangePassword = () => {
                     name="oldPassword"
                     placeholder="Enter your old password"
                     mt="md"
-                    {...form.getInputProps("oldPassword")}
+                    {...form.getInputProps("old_password")}
                 />
 
                 <Space h="xl"/>
@@ -48,7 +83,7 @@ const ChangePassword = () => {
                     label="New Password"
                     name="newPassword"
                     placeholder="Enter your new password"
-                    {...form.getInputProps("newPassword")}
+                    {...form.getInputProps("new_password")}
                 />
                 <PasswordInput
                     label="Confirm New Password"

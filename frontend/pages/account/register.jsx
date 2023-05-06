@@ -39,16 +39,16 @@ const RegisterPage = () => {
         value.length < 2 ? "Username must be at least 2 characters" : null,
       email: (value) => (!/^\S+@\S+$/.test(value) ? "Invalid email" : null),
       password: (value, values) => {
-        if (value.length < 2) {
-          return "Password must be at least 2 characters";
+        if (value.length < 8) {
+          return "Password must be at least 8 characters";
         }
         if (value !== values.confirmPassword) {
           return "Passwords do not match";
         }
       },
       confirmPassword: (value, values) => {
-        if (value.length < 2) {
-          return "Password must be at least 2 characters";
+        if (value.length < 8) {
+          return "Password must be at least 8 characters";
         }
         if (value !== values.password) {
           return "Passwords do not match";

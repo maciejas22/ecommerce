@@ -1,29 +1,57 @@
-import {useContext} from "react";
-
 import {
-  Avatar,
-  Button,
-  Container,
-  FileButton,
-  Flex,
-  SimpleGrid,
-  Space,
-  TextInput,
-  Title,
-  UnstyledButton,
+    Avatar,
+    Button,
+    Container,
+    FileButton,
+    Flex,
+    SimpleGrid,
+    Space,
+    TextInput,
+    Title,
+    UnstyledButton,
 } from "@mantine/core";
+import {notifications} from '@mantine/notifications';
 import {useForm} from "@mantine/form";
 
-import AuthContext from "../../context/AuthProvider";
+import useAxios from "@/utils/useAxios";
+import {myJSONformatter} from "@/utils/myJSONformatter";
 
-const Account = ({user}) => {
-    const {updateUser} = useContext(AuthContext);
+
+const Account = ({userState}) => {
+    const [user, setUser] = userState;
+    const api = useAxios();
+    const updateUser = async (form, values) => {
+        const {first_name, last_name, username, email} = values;
+        const body = {
+            ...(first_name && {first_name}),
+            ...(last_name && {last_name}),
+            ...(username && {username}),
+            ...(email && {email})
+        };
+
+        return await api
+            .put("profile/", JSON.stringify(body))
+            .then((response) => {
+                setUser(response.data);
+                notifications.show({
+                    title: "Success",
+                    message: 'Profile updated successfully',
+                    color: "green",
+                })
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    let data = myJSONformatter(error.response.data);
+                    form.setErrors(data);
+                }
+            });
+
+    };
 
     const form = useForm({
         initialValues: {
             first_name: user?.first_name,
             last_name: user?.last_name,
-            // img: user?.img,
             username: user.username,
             email: user.email,
         },

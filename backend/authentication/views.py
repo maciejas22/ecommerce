@@ -1,15 +1,44 @@
+from django.conf import settings
 from rest_framework import generics, permissions, mixins, status
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .models import Profile
 from .serializers import MyTokenObtainPairSerializer, ProfileSerializer, ChangePasswordSerializer
 
 
+def update_refresh_token(response):
+    if response.status_code == status.HTTP_200_OK:
+        response.set_cookie(
+            key='refresh',
+            value=response.data['refresh'],
+            httponly=True,
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds(),
+            expires=None,
+            samesite='Lax',
+        )
+        response.data.pop('refresh')
+    return response
+
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        update_refresh_token(response)
+        return response
+
+
+class MyTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get('refresh')
+        request.data['refresh'] = refresh_token
+        response = super().post(request, *args, **kwargs)
+        update_refresh_token(response)
+        return response
 
 
 class ProfileView(mixins.CreateModelMixin,

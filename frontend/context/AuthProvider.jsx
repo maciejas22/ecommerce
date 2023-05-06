@@ -1,33 +1,56 @@
 import {createContext, useEffect, useState} from "react";
-
-import {useLocalStorage} from "@mantine/hooks";
-
+import {notifications} from '@mantine/notifications';
 import {useRouter} from "next/router";
-
 import jwt_decode from "jwt-decode";
-
 import axios from "axios";
+
+import MyLoader from "@/components/MyLoader";
+
+const BASEURL = "http://127.0.0.1:8000/api/";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
+const axiosInstance = axios.create({
+    baseURL: BASEURL,
+    withCredentials: true,
+    headers: {
+        "Content-Type": "application/json",
+    }
+});
+
+axiosInstance.interceptors.response.use(
+    response => response,
+    error => {
+        console.log(error);
+        notifications.show({
+            title: "Error",
+            message: error?.response?.data?.detail,
+            color: "red",
+        })
+    }
+)
+
 export const AuthProvider = ({children}) => {
     const router = useRouter();
-
-    const [authTokens, setAuthTokens, removeAuthTokens] = useLocalStorage({
-        key: "authTokens",
-        defaultValue: null,
-    });
-    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [accessToken, setAccessToken] = useState(null);
+    const [userName, setUserName] = useState(null);
 
     useEffect(() => {
-        if (authTokens !== null) {
-            const decoded = jwt_decode(authTokens.refresh).username;
-            setUser(decoded);
-        }
-    }, [authTokens]);
-
+        setLoading(true);
+        axiosInstance
+            .post("token/refresh/")
+            .then((response) => {
+                const token = response?.data?.access || null;
+                if (token) {
+                    setAccessToken(token);
+                    setUserName(jwt_decode(token).username);
+                }
+            })
+            .then(() => setLoading(false))
+    }, [])
     const registerUser = async (form, values) => {
         const body = {
             first_name: values.first_name || "",
@@ -37,17 +60,12 @@ export const AuthProvider = ({children}) => {
             password: values.password,
         };
 
-        const response = await axios
-            .post("http://localhost:8000/api/profile/", JSON.stringify(body), {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
+        await axiosInstance
+            .post("profile/", JSON.stringify(body))
             .then((response) => {
                 router.push("/account/login");
             })
             .catch((error) => {
-                console.log(error.response);
                 if (error.response.data.password) {
                     error.response.data.confirmPassword = error.response.data.password;
                 }
@@ -60,158 +78,44 @@ export const AuthProvider = ({children}) => {
             username: values.username,
             password: values.password,
         };
-        const response = await axios
-            .post("http://localhost:8000/api/token/", JSON.stringify(body), {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
+
+        await axiosInstance
+            .post("token/", JSON.stringify(body))
             .then((response) => {
-                setAuthTokens(response.data);
-                setUser(jwt_decode(response.data.refresh).username);
+                let token = response.data.access;
+                setAccessToken(token);
+                setUserName(jwt_decode(token).username);
                 router.push("/");
             })
             .catch((error) => {
-                console.log(error);
                 form.setErrors({
                     username: "Invalid Credentials",
                     password: "Invalid Credentials",
                 });
-            });
+            })
     };
 
     const logoutUser = () => {
-        removeAuthTokens();
-        setAuthTokens(null);
-        setUser(null);
+        setAccessToken(null);
+        setUserName(null);
         router.push("/");
     };
 
-    const changeUserPassword = async (form, values) => {
-        const body = {
-            old_password: values.oldPassword,
-            new_password: values.newPassword,
-        }
-
-        const response = await axios
-            .put("http://localhost:8000/api/profile/update_password/", JSON.stringify(body), {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${authTokens?.access}`,
-                },
-            })
-            .then((response) => {
-                console.log(response);
-                logoutUser();
-            })
-            .catch((error) => {
-                console.log(error);
-                form.setErrors(error.response.data);
-            });
-        return response;
-    }
-
-
-    const updateUser = async (form, values) => {
-        const body = {
-            first_name: values.first_name || "",
-            last_name: values.last_name || "",
-            username: values.username,
-            email: values.email,
-        };
-
-        const response = await axios
-            .put("http://127.0.0.1:8000/api/profile/", JSON.stringify(body), {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${authTokens?.access}`,
-                },
-            })
-            .then((response) => {
-                console.log(response);
-                return getUserData();
-            })
-            .catch((error) => {
-                console.log(JSON.stringify(body));
-                console.log(error);
-                logoutUser();
-                return null;
-            });
-
-        return response;
-    };
-
-    const updateAddress = async (form, values) => {
-        const body = {
-            address: {
-                street: values.address.street || "",
-                number: values.address.number ? parseInt(values.address.number) : null,
-                apartment_number: values.address.apartment_number
-                    ? parseInt(values.address.apartment_number)
-                    : null,
-                city: {
-                    name: values.address.city.name || "",
-                    postal_code: values.address.city.postal_code || "",
-                    country: {
-                        name: values.address.city.country.name || "",
-                    },
-                },
-            },
-        };
-
-        const response = await axios
-            .put("http://127.0.0.1:8000/api/profile/", JSON.stringify(body), {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${authTokens?.access}`,
-                },
-            })
-            .then((response) => {
-                console.log(response);
-                return getUserData();
-            })
-            .catch((error) => {
-                console.log(error);
-                logoutUser();
-                return null;
-            });
-
-        return response;
-    };
-
-    const getUserData = async () => {
-        const response = axios
-            .get("http://localhost:8000/api/profile/", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${authTokens?.access}`,
-                },
-            })
-            .then((response) => {
-                return response.data;
-            })
-            .catch((error) => {
-                logoutUser();
-                return null;
-            });
-
-        return response;
-    };
 
     const contextData = {
-        authTokens: authTokens,
-        user: user,
+        userName: userName,
+        setUserName: setUserName,
+        accessToken: accessToken,
+        setAccessToken: setAccessToken,
 
         loginUser: loginUser,
         registerUser: registerUser,
-        updateUser: updateUser,
-        updateAddress: updateAddress,
-        changeUserPassword: changeUserPassword,
-        getUserData: getUserData,
         logoutUser: logoutUser,
     };
 
     return (
-        <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={contextData}>
+            {loading ? <MyLoader/> : children}
+        </AuthContext.Provider>
     );
 };

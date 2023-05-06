@@ -37,6 +37,9 @@ class CartDetail(mixins.RetrieveModelMixin,
 
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
+        if instance is None or instance.status != 'UNSUBMITTED':
+            instance = Cart.objects.create(user=self.request.user)
+
         product = Product.objects.get(id=request.data['id'])
         if product is None:
             return Response(data={'message': 'Product not found.'}, status=404)
@@ -48,8 +51,6 @@ class CartDetail(mixins.RetrieveModelMixin,
             serializer = self.get_serializer(instance)
             return Response(serializer.data)
 
-        if instance is None:
-            instance = Cart.objects.create(user=self.request.user)
         instance.items.create(product=product)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)

@@ -8,11 +8,12 @@ class Cart(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class OrderStatus(models.TextChoices):
+        UNSUBMITTED = "UNSUBMITTED", "Unsubmitted"
         PENDING = "PENDING", "Pending"
         COMPLETED = "COMPLETED", "Completed"
         CANCELLED = "CANCELLED", "Cancelled"
 
-    status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.PENDING)
+    status = models.CharField(max_length=11, choices=OrderStatus.choices, default=OrderStatus.UNSUBMITTED)
 
     class Meta:
         ordering = ("-created",)

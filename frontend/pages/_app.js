@@ -1,8 +1,8 @@
 import Head from "next/head";
 
 import {AppShell, ColorSchemeProvider, MantineProvider} from "@mantine/core";
+import {Notifications} from "@mantine/notifications";
 import {useLocalStorage} from "@mantine/hooks";
-
 import {AuthProvider} from "@/context/AuthProvider";
 import {CartProvider} from "@/context/CartProvider";
 import MyHeader from "@/components/MyHeader";
@@ -43,6 +43,7 @@ export default function App(props) {
                 >
                     <AuthProvider>
                         <CartProvider>
+                            <Notifications/>
                             <AppShell header={<MyHeader/>} footer={<MyFooter/>}>
                                 <Component {...pageProps} />
                             </AppShell>

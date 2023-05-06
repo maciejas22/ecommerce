@@ -5,7 +5,7 @@ import ItemMobile from "@/components/Cart/ItemMobile";
 import {IconShoppingCartOff} from "@tabler/icons-react";
 
 
-export default function ItemSegment({items, addItem, updateQuantity, deleteItem}) {
+export default function ItemSegment({items, addItem, updateQuantity, deleteItem, nextStep}) {
     const [windowWidth, setWindowWidth] = useState(9999);
 
     useEffect(() => {
@@ -81,7 +81,7 @@ export default function ItemSegment({items, addItem, updateQuantity, deleteItem}
                             $
                         </Text>
                     </Group>
-                    <Button>Pay</Button>
+                    <Button onClick={nextStep}>Add Shipping address</Button>
                 </Flex>
             </Grid.Col>
         </Grid>
