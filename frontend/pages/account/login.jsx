@@ -9,7 +9,7 @@ import {IconLock, IconUser} from "@tabler/icons-react";
 
 import AuthContext from "@/context/AuthProvider";
 
-const login = () => {
+const Login = () => {
     const {loginUser} = useContext(AuthContext);
 
     const form = useForm({
@@ -61,4 +61,4 @@ const login = () => {
     );
 };
 
-export default login;
+export default Login;

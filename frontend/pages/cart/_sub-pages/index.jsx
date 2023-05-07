@@ -23,7 +23,7 @@ const Index = () => {
 
     const [loading, setLoading] = useState(true);
     const [address, setAddress] = useState();
-    const {items, getCart, addItem, updateQuantity, deleteItem,} = useContext(CartContext);
+    const {items, getCart, addItem, updateQuantity, deleteItem} = useContext(CartContext);
     const elements = [
         {
             label: "Cart",
