@@ -3,7 +3,7 @@ import axios from "axios";
 import AuthContext from "@/context/AuthProvider";
 import jwt_decode from "jwt-decode";
 
-const BASEURL = "http://127.0.0.1:8000/api/";
+const BASEURL = process.env.BASE_URL;
 
 const useAxios = () => {
     const {accessToken, setAccessToken, userName, setUserName, logoutUser} = useContext(AuthContext);

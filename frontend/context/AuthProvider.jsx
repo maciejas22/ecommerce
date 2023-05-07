@@ -6,7 +6,7 @@ import axios from "axios";
 
 import MyLoader from "@/components/MyLoader";
 
-const BASEURL = "http://127.0.0.1:8000/api/";
+const BASEURL = process.env.BASE_URL;
 
 const AuthContext = createContext();
 

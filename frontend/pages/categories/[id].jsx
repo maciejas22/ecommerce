@@ -22,9 +22,11 @@ export async function getStaticPaths() {
     };
 }
 
+const BASE_URL = process.env.BASE_URL;
+
 export async function getStaticProps({params}) {
     try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/${params.id}/`);
+        const response = await axios.get(`${BASE_URL}${params.id}/`);
         const data = response.data;
         return {
             props: {
