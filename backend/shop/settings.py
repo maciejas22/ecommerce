@@ -26,15 +26,20 @@ from datetime import timedelta
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    '*',
+    '.localhost',
+    '127.0.0.1',
+    'flowery-wrench-production.up.railway.app',
+    'ecommerce-production-dc00.up.railway.app',
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'flowery-wrench-production.up.railway.app',
+    'ecommerce-production-dc00.up.railway.app',
 ]
 
 # Application definition
