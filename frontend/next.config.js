@@ -2,7 +2,7 @@
 const nextConfig = {
     reactStrictMode: true,
     env: {
-        BASE_URL: 'https://flowery-wrench-production.up.railway.app/'
+        BASE_URL: 'https://flowery-wrench-production.up.railway.app/api/'
     }
 }
 
