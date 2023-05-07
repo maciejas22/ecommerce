@@ -6,8 +6,8 @@ import axios from "axios";
 
 import MyLoader from "@/components/MyLoader";
 
+// const BASEURL = process.env.BASE_URL;
 const BASEURL = process.env.BASE_URL;
-
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -41,7 +41,7 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
         setLoading(true);
         axiosInstance
-            .post("token/refresh/")
+            .post("/token/refresh/")
             .then((response) => {
                 const token = response?.data?.access || null;
                 if (token) {
@@ -61,7 +61,7 @@ export const AuthProvider = ({children}) => {
         };
 
         await axiosInstance
-            .post("profile/", JSON.stringify(body))
+            .post("/profile/", JSON.stringify(body))
             .then((response) => {
                 router.push("/account/login");
             })
@@ -80,7 +80,7 @@ export const AuthProvider = ({children}) => {
         };
 
         await axiosInstance
-            .post("token/", JSON.stringify(body))
+            .post("/token/", JSON.stringify(body))
             .then((response) => {
                 let token = response.data.access;
                 setAccessToken(token);
