@@ -38,8 +38,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://flowery-wrench-production.up.railway.app/',
-    'https://ecommerce-production-dc00.up.railway.app/',
+    'https://flowery-wrench-production.up.railway.app',
+    'https://ecommerce-production-dc00.up.railway.app',
 ]
 
 # Application definition
