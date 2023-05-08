@@ -2,7 +2,7 @@ import {useContext, useState} from "react";
 
 import Link from "next/link";
 
-import {Avatar, Button, Group, Menu, Text, useMantineColorScheme,} from "@mantine/core";
+import {Avatar, Button, Group, Menu, Text, useMantineColorScheme} from "@mantine/core";
 
 import {
     IconChevronDown,

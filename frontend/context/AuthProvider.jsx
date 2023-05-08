@@ -7,7 +7,7 @@ import axios from "axios";
 import MyLoader from "@/components/MyLoader";
 
 // const BASEURL = process.env.BASE_URL;
-const BASEURL = process.env.BASE_URL;
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const AuthContext = createContext();
 
 export default AuthContext;

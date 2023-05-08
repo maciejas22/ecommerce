@@ -46,7 +46,7 @@ const Index = () => {
             label: "Payment",
             element:
                 <PayPalScriptProvider options={{
-                    "client-id": "AYRvQgauDWaOK8zEndYu5dAQRn4k_y6QEsZkh1e6re5OsDh2esyl-b399fHX-pVp1O8yZYNJW-ngxfkS",
+                    "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
                     components: "buttons"
                 }}>
                     <Pay prevStep={prevStep}

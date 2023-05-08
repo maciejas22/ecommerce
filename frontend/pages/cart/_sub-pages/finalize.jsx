@@ -46,7 +46,11 @@ export default function Pay({prevStep, items, address}) {
     return (
         <>
             {isPending ? <MyLoader/> : null}
-            <SimpleGrid cols={2}>
+            <SimpleGrid
+                columns={1}
+                spacing="md"
+                breakpoints={[{minWidth: "sm", cols: 2}]}
+            >
                 <Stack>
                     <Stack spacing='xs'>
                         <Title>Adress:</Title>

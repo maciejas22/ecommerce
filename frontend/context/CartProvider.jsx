@@ -7,6 +7,7 @@ export default CartContext;
 
 export const CartProvider = ({children}) => {
     const api = useAxios();
+    const [loading, setLoading] = useState(false);
     const [items, setItems] = useState([]);
     const getHistory = async () => {
         return await api
@@ -71,8 +72,8 @@ export const CartProvider = ({children}) => {
 
 
     return (
-        <CartContext.Provider value={contextData}>{children}</CartContext.Provider>
+        <CartContext.Provider value={contextData}>
+            {loading ? null : children}
+        </CartContext.Provider>
     );
 };
-
-
