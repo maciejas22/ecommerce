@@ -51,6 +51,7 @@ export const AuthProvider = ({children}) => {
             })
             .then(() => setLoading(false))
     }, [])
+
     const registerUser = async (form, values) => {
         const body = {
             first_name: values.first_name || "",
@@ -100,7 +101,6 @@ export const AuthProvider = ({children}) => {
         setUserName(null);
         router.push("/");
     };
-
 
     const contextData = {
         userName: userName,
