@@ -43,7 +43,7 @@ export default function ItemSegment({items, addItem, updateQuantity, deleteItem,
                             key={index}
                             index={index}
                             id={item.id}
-                            img={item.thumbnail}
+                            product_thumbnail={item.product_thumbnail}
                             name={item.product}
                             price={item.product_price}
                             discount={item.product_discount}
@@ -56,7 +56,7 @@ export default function ItemSegment({items, addItem, updateQuantity, deleteItem,
                             key={index}
                             index={index}
                             id={item.id}
-                            img={item.thumbnail}
+                            product_thumbnail={item.product_thumbnail}
                             name={item.product}
                             price={item.product_price}
                             discount={item.product_discount}

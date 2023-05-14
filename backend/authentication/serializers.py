@@ -12,7 +12,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         token["username"] = user.username
-        token["email"] = user.email
+        token["avatar"] = user.avatar.url if user.avatar else None
 
         return token
 
@@ -52,7 +52,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("first_name", "last_name", "username", "email", "password", "address")
+        fields = ("first_name", "last_name", "username", "avatar", "email", "password", "address")
         extra_kwargs = {
             "username": {"required": True, "validators": [UniqueValidator(queryset=Profile.objects.all())]},
             "email": {"required": True, "validators": [UniqueValidator(queryset=Profile.objects.all())]},

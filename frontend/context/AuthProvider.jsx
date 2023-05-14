@@ -6,14 +6,13 @@ import axios from "axios";
 
 import MyLoader from "@/components/MyLoader";
 
-// const BASEURL = process.env.BASE_URL;
-const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const AuthContext = createContext();
 
 export default AuthContext;
 
 const axiosInstance = axios.create({
-    baseURL: BASEURL,
+    baseURL: BASE_URL,
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
@@ -37,6 +36,7 @@ export const AuthProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [accessToken, setAccessToken] = useState(null);
     const [userName, setUserName] = useState(null);
+    const [avatarURL, setAvatarURL] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -47,6 +47,7 @@ export const AuthProvider = ({children}) => {
                 if (token) {
                     setAccessToken(token);
                     setUserName(jwt_decode(token).username);
+                    setAvatarURL(BASE_URL.slice(0, -5) + jwt_decode(token).avatar);
                 }
             })
             .then(() => setLoading(false))
@@ -107,6 +108,8 @@ export const AuthProvider = ({children}) => {
         setUserName: setUserName,
         accessToken: accessToken,
         setAccessToken: setAccessToken,
+        avatarURL: avatarURL,
+        setAvatarURL: setAvatarURL,
 
         loginUser: loginUser,
         registerUser: registerUser,

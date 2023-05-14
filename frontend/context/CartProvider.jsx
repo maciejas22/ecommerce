@@ -7,6 +7,7 @@ export default CartContext;
 
 export const CartProvider = ({children}) => {
     const api = useAxios();
+    const [orderID, setOrderID] = useState(null);
     const [loading, setLoading] = useState(false);
     const [items, setItems] = useState([]);
     const getHistory = async () => {
@@ -22,6 +23,7 @@ export const CartProvider = ({children}) => {
             .get("order/get-cart/")
             .then((response) => {
                 setItems(response.data.items)
+                setOrderID(response.data.id)
                 return response.data;
             });
     };
@@ -32,9 +34,10 @@ export const CartProvider = ({children}) => {
         }
 
         return await api
-            .put(`order/update-cart/${item_id}/`, JSON.stringify(body))
+            .put(`order/update-cart/${item_id}/`, body)
             .then((response) => {
                 setItems(response.data.items)
+                setOrderID(response.data.id)
                 return response.data;
             });
     };
@@ -44,20 +47,30 @@ export const CartProvider = ({children}) => {
             .delete(`order/update-cart/${item_id}/`)
             .then((response) => {
                 setItems(response.data.items)
+                setOrderID(response.data.id)
                 return response.data;
             });
     };
 
     const addItem = async (product_id) => {
         const body = {
-            "id": product_id,
+            "id": product_id
         }
         return await api
-            .post(`order/get-cart/`, JSON.stringify(body))
+            .post(`order/get-cart/`, body)
             .then((response) => {
                 setItems(response.data.items)
+                setOrderID(response.data.id)
                 return response.data;
             });
+    };
+
+    const setStatus = async (status) => {
+        const body = {
+            "status": status
+        }
+        return await api
+            .post(`order/update-cart/${orderID}/`, body)
     };
 
     const contextData = {

@@ -72,10 +72,15 @@ class CartModifyView(mixins.UpdateModelMixin,
 
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
-        for item in instance.items.all():
-            if item.id == kwargs['item_id']:
-                item.quantity = request.data['quantity']
-                item.save()
+        if 'item_id' in kwargs:
+            for item in instance.items.all():
+                if item.id == kwargs['item_id']:
+                    item.quantity = request.data['quantity']
+                    # item.save()
+        if 'status' in request.data:
+            instance.status = request.data['status']
+
+        instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 

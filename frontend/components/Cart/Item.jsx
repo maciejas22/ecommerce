@@ -2,6 +2,8 @@ import {useState} from "react";
 import {Button, Group, Image, Select, Text} from "@mantine/core";
 import {IconTrash} from "@tabler/icons-react";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const ProductPrice = ({price, discount}) => {
     if (discount > 0) {
         return (
@@ -26,7 +28,7 @@ const ProductPrice = ({price, discount}) => {
 const Item = ({
                   index,
                   id,
-                  img,
+                  product_thumbnail,
                   name,
                   price,
                   discount,
@@ -45,11 +47,12 @@ const Item = ({
         deleteItem(id);
     };
 
+    let img_url = product_thumbnail ? BASE_URL.slice(0, -4) + product_thumbnail : null
     return (
         <Group position="apart" py="xs">
             <Group>
                 <Image
-                    src={img}
+                    src={img_url}
                     width={60}
                     height={72}
                     alt="product image"

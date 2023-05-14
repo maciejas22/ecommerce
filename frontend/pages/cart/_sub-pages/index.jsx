@@ -89,7 +89,7 @@ const Index = () => {
                    }}
         >
             <Space h="xl"/>
-            <Stepper active={activeStep} radius='md' py='12'>
+            <Stepper active={activeStep} radius='md' py='12' breakpoint="sm">
                 <Stepper.Step label='First Step' description='Add products to cart'/>
                 <Stepper.Step label='Second Step' description='Add shipping address'/>
                 <Stepper.Step label='Third Step' description='Pay'/>

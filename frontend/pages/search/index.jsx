@@ -2,7 +2,7 @@ import axios from "axios";
 
 import ProductSegment from "@/components/ProductSegment";
 
-const BASEURL = process.env.BASE_URL;
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 
 export async function getServerSideProps({query}) {
     const searchQuery = query.q || "";

@@ -2,6 +2,8 @@ import axios from "axios";
 
 import ProductSegment from "@/components/ProductSegment";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const categories = [
     {name: "TVs", slug: "tvs"},
     {name: "Audio", slug: "audio"},
@@ -21,8 +23,6 @@ export async function getStaticPaths() {
         fallback: false,
     };
 }
-
-const BASE_URL = process.env.BASE_URL;
 
 export async function getStaticProps({params}) {
     try {

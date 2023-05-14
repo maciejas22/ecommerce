@@ -1,9 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    env: {
-        BASE_URL: 'https://flowery-wrench-production.up.railway.app/api/'
-    }
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'flowery-wrench-production.up.railway.app',
+                port: '',
+                pathname: '/api/media/assets/products/**',
+            },
+            {
+                protocol: 'http',
+                hostname: '127.0.0.1',
+                port: '8000',
+                pathname: '/api/media/assets/products/**',
+            }
+        ],
+    },
 }
 
 module.exports = nextConfig

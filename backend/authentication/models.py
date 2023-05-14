@@ -1,6 +1,6 @@
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
 
 
 class Country(models.Model):
@@ -31,4 +31,5 @@ class Address(models.Model):
 
 
 class Profile(AbstractUser):
+    avatar = models.ImageField(upload_to="assets/users/", blank=True, null=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True)

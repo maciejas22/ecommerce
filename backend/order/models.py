@@ -19,7 +19,7 @@ class Cart(models.Model):
         ordering = ("-created",)
 
     def __str__(self):
-        return self.user.username
+        return self.created.strftime("%Y-%m-%d %H:%M:%S")
 
 
 class CartItem(models.Model):

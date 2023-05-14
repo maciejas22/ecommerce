@@ -2,6 +2,8 @@ import {useState} from 'react'
 import {Button, Flex, Group, Image, Select, Text} from "@mantine/core";
 import {IconTrash} from "@tabler/icons-react";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const ProductPrice = ({price, discount}) => {
     if (discount > 0) {
         return (
@@ -25,7 +27,7 @@ const ProductPrice = ({price, discount}) => {
 export default function ItemMobile({
                                        index,
                                        id,
-                                       img,
+                                       product_thumbnail,
                                        name,
                                        price,
                                        discount,
@@ -44,10 +46,11 @@ export default function ItemMobile({
         deleteItem(id);
     };
 
+    let img_url = product_thumbnail ? BASE_URL.slice(0, -4) + product_thumbnail : null
     return (
         <Flex direction="row" align="center" py="xs">
             <Image
-                src={img}
+                src={img_url}
                 width={70}
                 height={84}
                 alt="product image"

@@ -7,7 +7,9 @@ import {IconShoppingCartPlus} from "@tabler/icons-react";
 import CartContext from "@/context/CartProvider";
 import placeholder from "../public/placeholder.svg";
 
-const ProductCard = ({id, img, name, price, discount}) => {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const ProductCard = ({id, thumbnail, name, price, discount}) => {
     const {addItem} = useContext(CartContext);
     const [variant, setVariant] = useState("outline");
 
@@ -19,6 +21,8 @@ const ProductCard = ({id, img, name, price, discount}) => {
         setVariant("outline");
     };
 
+    let img_url = thumbnail ? BASE_URL.slice(0, -5) + thumbnail : null
+
     return (
         <Card shadow="xl" withBorder radius="md" width={220} py="lg">
             <Card.Section
@@ -29,7 +33,7 @@ const ProductCard = ({id, img, name, price, discount}) => {
                     alignItems: "center",
                 }}
             >
-                <ProductImage img={img} height={240} width={200}/>
+                <ProductImage img={img_url} height={240} width={200}/>
             </Card.Section>
 
             <Text size="lg" weight={500} color="blue">
@@ -45,6 +49,11 @@ const ProductCard = ({id, img, name, price, discount}) => {
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                     onClick={() => addItem(id)}
+                    sx={{
+                        '@media (max-width: 1024px)': {
+                            width: '100%',
+                        },
+                    }}
                 >
                     <IconShoppingCartPlus size={20} stroke={1.5}/>
                 </Button>

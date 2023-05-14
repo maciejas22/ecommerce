@@ -1,4 +1,4 @@
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 
 import Link from "next/link";
 
@@ -20,7 +20,12 @@ import AuthContext from "@/context/AuthProvider";
 const User = ({width}) => {
     const {colorScheme, toggleColorScheme} = useMantineColorScheme();
     const [userMenuOpened, setUserMenuOpened] = useState(false);
-    const {userName, logoutUser} = useContext(AuthContext);
+    const {userName, avatarURL, logoutUser} = useContext(AuthContext);
+    const [userNameState, setUserNameState] = useState(userName);
+
+    useEffect(() => {
+        setUserNameState(userName); // Update userNameState when context value changes
+    }, [userName]);
 
     return (
         <Menu
@@ -32,7 +37,7 @@ const User = ({width}) => {
             <Menu.Target>
                 <Button variant="outline">
                     <Group spacing={7}>
-                        {userName ? LoggedUserAvatar(userName, width) : AnonymousUserAvatar(width)}
+                        {userName ? LoggedUserAvatar(avatarURL, userName, width) : AnonymousUserAvatar(width)}
                     </Group>
                 </Button>
             </Menu.Target>
@@ -57,10 +62,10 @@ const User = ({width}) => {
     );
 };
 
-const LoggedUserAvatar = (user, width) => {
+const LoggedUserAvatar = (img, user, width) => {
     return (
         <>
-            <Avatar src={null} alt={user} radius="xl" size={20}/>
+            <Avatar src={img} alt={user} radius="xl" size={20}/>
             {width > 768 ? (
                 <Text weight={500} size="sm" sx={{lineHeight: 1}} mr={3}>
                     {user}

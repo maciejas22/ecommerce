@@ -15,7 +15,8 @@ class CartItemSerializer(serializers.ModelSerializer):
         rep['product'] = Product.objects.get(id=instance.product.id).name
         rep['product_price'] = Product.objects.get(id=instance.product.id).price
         rep['product_discount'] = Product.objects.get(id=instance.product.id).discount
-        rep['thumbnail'] = Product.objects.get(id=instance.product.id).thumbnail or None
+        rep['product_thumbnail'] = Product.objects.get(id=instance.product.id).thumbnail.url if Product.objects.get(
+            id=instance.product.id).thumbnail else None
         return rep
 
     def create(self, validated_data):

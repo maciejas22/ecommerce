@@ -1,6 +1,9 @@
+import {useContext} from "react";
 import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js';
 import {Button, Group, SimpleGrid, Space, Stack, Text, Title} from "@mantine/core";
 import MyLoader from "@/components/MyLoader";
+
+import CartContext from "@/context/CartProvider";
 
 function createOrder(data, actions, amount) {
     return actions.order.create({
@@ -14,15 +17,16 @@ function createOrder(data, actions, amount) {
     });
 }
 
-function onApprove(data, actions) {
+function onApprove(data, actions, setStatus) {
+    setStatus("PENDING")
     return actions.order.capture();
 }
 
-function MyPayPalButton({amount}) {
+function MyPayPalButton({amount, setStatus}) {
     return (
         <PayPalButtons
             createOrder={(data, actions) => createOrder(data, actions, amount)}
-            onApprove={onApprove}
+            onApprove={(data, actions) => onApprove(data, actions, setStatus)}
             style={
                 {
                     color: 'blue',
@@ -37,6 +41,7 @@ function MyPayPalButton({amount}) {
 }
 
 export default function Pay({prevStep, items, address}) {
+    const {setStatus} = useContext(CartContext);
     const [{isPending}] = usePayPalScriptReducer();
     const amount = items.reduce((acc, item) => {
             return acc + (item.product_price - item.product_discount) * item.quantity
@@ -82,7 +87,7 @@ export default function Pay({prevStep, items, address}) {
                         </Group>
                         <Space h='xl'/>
 
-                        <MyPayPalButton amount={amount}/>
+                        <MyPayPalButton amount={amount} setStatus={setStatus}/>
                     </div>
                     <Button variant="default" onClick={prevStep}>
                         Back

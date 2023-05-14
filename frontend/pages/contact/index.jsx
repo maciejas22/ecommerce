@@ -1,8 +1,52 @@
 import {Button, Container, Group, SimpleGrid, Text, Textarea, TextInput, Title,} from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {notifications} from "@mantine/notifications";
 import {IconAt, IconMessage, IconUser} from "@tabler/icons-react";
+import axios from "axios";
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const axiosInstance = axios.create({
+    baseURL: BASEURL,
+    withCredentials: true,
+    headers: {
+        "Content-Type": "application/json",
+    }
+});
+
+axiosInstance.interceptors.response.use(
+    response => response,
+    error => {
+        console.log(error);
+        notifications.show({
+            title: "Error",
+            message: error?.response?.data?.detail,
+            color: "red",
+        })
+    }
+)
 
 const Home = () => {
+    const sendMail = async (form, values) => {
+        const body = {
+            name: values.name,
+            email: values.email,
+            subject: values.subject,
+            message: values.message,
+        }
+
+        await axiosInstance
+            .post("contact/", JSON.stringify(body))
+            .then((response) => {
+                notifications.show({
+                    title: "Success",
+                    message: "Your message has been sent",
+                    color: "green",
+                })
+                form.reset();
+            })
+    };
+
     const form = useForm({
         initialValues: {
             name: "",
@@ -23,7 +67,7 @@ const Home = () => {
 
     return (
         <Container size="md">
-            <form onSubmit={form.onSubmit(console.log)}>
+            <form onSubmit={form.onSubmit((values) => sendMail(form, values))}>
                 <Title order={1} weight={900} align="center">
                     Contact Us
                 </Title>
