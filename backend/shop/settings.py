@@ -27,8 +27,12 @@ SECRET_KEY = 'django-insecure-_0ue(@u43+^!%dd958evffn1kw!zk^#bt#&gb%-ca6fc1vn(-v
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    'localhost',
+    '127.0.0.1',    
+    'flowery-wrench-production.up.railway.app',
+    'ecommerce-production-dc00.up.railway.app',
 ]
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
