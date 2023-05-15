@@ -87,6 +87,7 @@ export const AuthProvider = ({children}) => {
                 let token = response.data.access;
                 setAccessToken(token);
                 setUserName(jwt_decode(token).username);
+                setAvatarURL(BASE_URL.slice(0, -5) + jwt_decode(token).avatar);
                 router.push("/");
             })
             .catch((error) => {
