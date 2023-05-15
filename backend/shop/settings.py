@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    '127.0.0.1',    
+    '127.0.0.1',
     'flowery-wrench-production.up.railway.app',
     'ecommerce-production-dc00.up.railway.app',
 ]
@@ -48,7 +48,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:3000',
     'https://flowery-wrench-production.up.railway.app',
     'https://ecommerce-production-dc00.up.railway.app',
-],
+]
 
 # Application definition
 
