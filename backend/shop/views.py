@@ -16,7 +16,7 @@ class ContactView(APIView):
         email_body = f'Hi {name}, \n' \
                      f'Thanks for contacting us!\n' \
                      f'We received you message: \n' \
-                     f'\'{subject}\'.\n' \
+                     f'\'{subject}\'\n' \
                      f'\'{message}\'\n' \
                      f'We will get back to you as soon as possible.\n' \
                      f'Best Regards'

@@ -47,7 +47,7 @@ const Item = ({
         deleteItem(id);
     };
 
-    let img_url = product_thumbnail ? BASE_URL.slice(0, -4) + product_thumbnail : null
+    let img_url = product_thumbnail ? BASE_URL.slice(0, -5) + product_thumbnail : null
     return (
         <Group position="apart" py="xs">
             <Group>

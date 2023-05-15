@@ -46,7 +46,7 @@ export default function ItemMobile({
         deleteItem(id);
     };
 
-    let img_url = product_thumbnail ? BASE_URL.slice(0, -4) + product_thumbnail : null
+    let img_url = product_thumbnail ? BASE_URL.slice(0, -5) + product_thumbnail : null
     return (
         <Flex direction="row" align="center" py="xs">
             <Image
