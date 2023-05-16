@@ -1,9 +1,12 @@
+import uuid
+
 from authentication.models import Profile
 from django.db import models
 from product.models import Product
 
 
 class Cart(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -23,6 +26,7 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cart = models.ForeignKey(Cart, related_name="items", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
