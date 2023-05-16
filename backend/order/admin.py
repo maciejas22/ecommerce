@@ -8,8 +8,8 @@ class CartItemInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]
-
-
-admin.site.register(Cart, CartAdmin)
+    list_display = ['id', 'user', 'status', 'created']
+    list_filter = ['status', 'created']
