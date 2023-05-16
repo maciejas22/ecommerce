@@ -25,24 +25,25 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({params}) {
-    try {
-        const response = await axios.get(`${BASE_URL}${params.id}/`);
-        const data = response.data;
-        return {
-            props: {
-                name: categories.find((category) => category.slug === params.id).name,
-                data,
-            },
-        };
-    } catch (error) {
-        console.error(error);
-        return {
-            props: {
-                name: "",
-                data: [],
-            },
-        };
-    }
+    return await axios
+        .get(`${BASE_URL}${params.id}/`)
+        .then((response) => {
+            const data = response.data;
+            return {
+                props: {
+                    name: categories.find((category) => category.slug === params.id).name,
+                    data,
+                },
+            }
+        }).catch((error) => {
+            console.error(error);
+            return {
+                props: {
+                    name: "",
+                    data: [],
+                },
+            };
+        });
 }
 
 export default function Category({name, data}) {
