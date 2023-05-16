@@ -27,9 +27,9 @@ class Address(models.Model):
     city = models.ForeignKey(City, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.street + " " + self.number + ", " + self.city.name
+        return f"{self.street} {self.number}, {self.city.name}"
 
 
 class Profile(AbstractUser):
     avatar = models.ImageField(upload_to="assets/users/", blank=True, null=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
