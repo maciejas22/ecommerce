@@ -56,8 +56,8 @@ const Account = ({userState}) => {
             first_name: user?.first_name,
             last_name: user?.last_name,
             avatar: user?.avatar,
-            username: user.username,
-            email: user.email,
+            username: user?.username,
+            email: user?.email,
         },
     });
     const [avatar, setAvatar] = useState(user?.avatar);
