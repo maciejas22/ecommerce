@@ -47,3 +47,27 @@ class ProductSearachView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     
+class NewestProducstsView(generics.GenericAPIView):
+    def get(self, request):
+        newest_products = Product.objects.order_by('-date_added')[:5]
+        discounted_products = Product.objects.filter(discount__gt=0).order_by('-date_added')[:5]
+
+        newest_products_data = [{'id': product.id,
+                                 'name': product.name,
+                                 'price': product.price,
+                                 'discount': product.discount,
+                                 'thumbnail': '/api/media/' + str(product.thumbnail)
+                                 } for product in newest_products]
+        discounted_products_data = [{'id': product.id,
+                                     'name': product.name,
+                                     'price': product.price,
+                                     'discount': product.discount,
+                                     'thumbnail': '/api/media/' + str(product.thumbnail)
+                                     } for product in discounted_products]
+
+        data = {
+            'newest_products': newest_products_data,
+            'discounted_products': discounted_products_data,
+        }
+
+        return Response(data)

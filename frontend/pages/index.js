@@ -1,6 +1,24 @@
+import axios from "axios";
+
 import FiveItemCarousel from "@/components/FiveItemCarousel";
 
-export default function Home() {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+export async function getStaticProps({params}) {
+  return await axios
+        .get(`${BASE_URL}newest/`)
+        .then((response) => {
+          const data = response.data;
+          return {
+            props: {
+              data,
+            },
+          }
+        })
+}
+
+export default function Home({data}) {
+  const {newest_products, discounted_products} = data
   let items = [
     { name: "Iphone 14 Pro", price: "999", discount: "0" },
     { name: "Iphone 14 Pro", price: "999", discount: "0" },
@@ -11,9 +29,8 @@ export default function Home() {
 
   return (
     <>
-      <FiveItemCarousel title={"Bestsellers"} items={items} />
-      <FiveItemCarousel title={"Newest"} items={items} />
-      <FiveItemCarousel title={"On sale"} items={items} />
+      <FiveItemCarousel title={"Newest"} items={newest_products} />
+      <FiveItemCarousel title={"On sale"} items={discounted_products} />
     </>
   );
 }

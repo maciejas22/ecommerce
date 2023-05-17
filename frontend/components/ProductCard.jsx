@@ -70,7 +70,7 @@ const ProductImage = ({img, height, width}) => {
                 alt="product image"
                 height={height}
                 width={width}
-                quality={100}
+                quality={50}
                 style={{objectFit: "contain"}}
             />
         );

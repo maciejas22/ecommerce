@@ -15,7 +15,11 @@ const FiveItemCarousel = ({ title, items }) => {
         dragFree
         align="center"
         slideGap="lg"
-        slideSize="25%"
+        breakpoints={[
+        { minWidth: 'sm', slideSize: '50%' },
+        { minWidth: 'md', slideSize: '33%' },
+        { minWidth: 'lg', slideSize: '25%' },
+      ]}
       >
         {items.map((item, index) => (
           <Carousel.Slide key={index}>

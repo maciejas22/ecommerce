@@ -81,7 +81,7 @@ const Index = () => {
     return (
         <>
             <MyNavbar active={active} setActive={setActive} data={data}/>
-            {loading ? null : data[active].element}
+            {loading ? <MyLoader/> : data[active].element}
         </>
     );
 };
