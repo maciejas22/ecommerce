@@ -74,9 +74,9 @@ class CartModifyView(mixins.UpdateModelMixin,
         instance = self.get_object()
         if 'item_id' in kwargs:
             for item in instance.items.all():
-                if item.id == kwargs['item_id']:
+                if item.product_id == kwargs['item_id']:
                     item.quantity = request.data['quantity']
-                    # item.save()
+                    item.save()
         if 'status' in request.data:
             instance.status = request.data['status']
 
