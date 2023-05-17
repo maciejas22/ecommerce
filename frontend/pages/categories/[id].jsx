@@ -28,7 +28,6 @@ export async function getStaticProps({params}) {
     return await axios
         .get(`${BASE_URL}${params.id}/`)
         .then((response) => {
-            console.log(`${BASE_URL}${params.id}/`);
             const data = response.data;
             return {
                 props: {
