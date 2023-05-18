@@ -1,6 +1,6 @@
 import uuid
 
-from authentication.models import Profile
+from authentication.models import Profile, Address
 from django.db import models
 from product.models import Product
 
@@ -8,6 +8,7 @@ from product.models import Product
 class Cart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class OrderStatus(models.TextChoices):

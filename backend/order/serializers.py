@@ -1,5 +1,6 @@
 from product.models import Product
 from rest_framework import serializers
+from authentication.serializers import AddressSerializer
 
 from .models import Cart, CartItem
 
@@ -28,10 +29,11 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True)
+    address = AddressSerializer(required=False)
 
     class Meta:
         model = Cart
-        fields = ('id', 'items', 'created',)
+        fields = ('id', 'items', 'address', 'created',)
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -41,7 +43,22 @@ class CartSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
+        address_data = validated_data.pop("address", None)
         cart = Cart.objects.create(**validated_data)
         for item_data in items_data:
             CartItem.objects.create(cart=cart, **item_data)
+        if address_data:
+            address = AddressSerializer.create(AddressSerializer(), address_data)
+            cart.address = address
+        cart.save()
         return cart
+
+    def update(self, instance, validated_data):
+        address_data = validated_data.pop("address", None)
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        if address_data:
+            address = AddressSerializer.create(AddressSerializer(), address_data)
+            instance.address = address
+        instance.save()
+        return instance

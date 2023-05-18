@@ -1,32 +1,82 @@
 import {Button, Container, Flex, SimpleGrid, Space, TextInput, Title,} from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {notifications} from "@mantine/notifications";
+import useAxios from "@/utils/useAxios";
 
 const Address = ({address, setAddress, nextStep, prevStep}) => {
+    const api = useAxios();
+    
     const form = useForm({
         initialValues: {
             address: {
-                street: address?.street,
-                number: address?.number === null ? "" : address?.number,
-                apartment_number:
-                    address?.apartment_number === null
-                        ? ""
-                        : address?.apartment_number,
+                street: address?.street || '',
+                number: address?.number || '',
+                apartment_number: address?.apartment_number || '',
                 city: {
-                    name: address?.city?.name,
-                    postal_code: address?.city?.postal_code,
+                    name: address?.city?.name || '',
+                    postal_code: address?.city?.postal_code || '',
                     country: {
-                        name: address?.city?.country?.name,
+                        name: address?.city?.country?.name || '',
                     },
                 },
             },
         },
+        
+        validate: {
+            address: {
+                street: (value) => (value.length < 2 ? 'Must have at least 2 characters' : null),
+                number: (value) => (value === '' ? 'This field is required' : null),
+                city: {
+                    name: (value) => (value.length < 2 ? 'Must have at least 2 characters' : null),
+                    postal_code: (value) => (value.length < 2 ? 'Must have at least 2 characters' : null),
+                    country: {
+                        name: (value) => (value.length < 2 ? 'Must have at least 2 characters' : null),
+                    }
+                },
+            },
+        },
     });
+    
+    const updateAddress = async (form, values) => {
+        const body = {
+            address: {
+                street: values.address.street || "",
+                number: values.address.number ? parseInt(values.address.number) : null,
+                apartment_number: values.address.apartment_number
+                    ? parseInt(values.address.apartment_number)
+                    : null,
+                city: {
+                    name: values.address.city.name || "",
+                    postal_code: values.address.city.postal_code || "",
+                    country: {
+                        name: values.address.city.country.name || "",
+                    },
+                },
+            },
+        };
+
+        return await api
+            .put("order/get-cart/", JSON.stringify(body), {})
+            .then((response) => {
+                notifications.show({
+                    title: "Success",
+                    message: 'Profile updated successfully',
+                    color: "green",
+                })
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    let data = myJSONformatter(error.response.data);
+                    form.setErrors(data);
+                }
+            });
+    };
 
     return (
         <Container>
             <form onSubmit={form.onSubmit((values) => {
                 setAddress(values.address)
-                nextStep()
+                updateAddress(form, values).then(nextStep())
             })}>
                 <Flex justify="center" my="xl">
                     <Title>Edit Adress</Title>

@@ -13,17 +13,14 @@ const Address = ({userState}) => {
     const form = useForm({
         initialValues: {
             address: {
-                street: user?.address?.street,
-                number: user?.address?.number === null ? "" : user?.address?.number,
-                apartment_number:
-                    user?.address?.apartment_number === null
-                        ? ""
-                        : user?.address?.apartment_number,
+                street: user?.address?.street || '',
+                number: user?.address?.number || '',
+                apartment_number: user?.address?.apartment_number || '',
                 city: {
-                    name: user?.address?.city?.name,
-                    postal_code: user?.address?.city?.postal_code,
+                    name: user?.address?.city?.name || '',
+                    postal_code: user?.address?.city?.postal_code || '',
                     country: {
-                        name: user?.address?.city?.country?.name,
+                        name: user?.address?.city?.country?.name || '',
                     },
                 },
             },
