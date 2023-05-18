@@ -21,11 +21,6 @@ const User = ({width}) => {
     const {colorScheme, toggleColorScheme} = useMantineColorScheme();
     const [userMenuOpened, setUserMenuOpened] = useState(false);
     const {userName, avatarURL, logoutUser} = useContext(AuthContext);
-    const [userNameState, setUserNameState] = useState(userName);
-
-    useEffect(() => {
-        setUserNameState(userName); // Update userNameState when context value changes
-    }, [userName]);
 
     return (
         <Menu
@@ -63,6 +58,7 @@ const User = ({width}) => {
 };
 
 const LoggedUserAvatar = (img, user, width) => {
+    console.log(img)
     return (
         <>
             <Avatar src={img} alt={user} radius="xl" size={20}/>

@@ -38,12 +38,18 @@ export const AuthProvider = ({children}) => {
     const [userName, setUserName] = useState(null);
     const [avatarURL, setAvatarURL] = useState(null);
 
-    const getUserData = async () => {
+    const getUserData = async (token) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        
         const response = axiosInstance
-            .get("profile/")
+            .get("profile/", config)
             .then((response) => {
-                setUserName(response.username)
-                setUserName(BASE_URL.slice(0, -5) + response.avatar)
+                setUserName(response.data.username)
+                setAvatarURL(BASE_URL.slice(0, -5) + response.data.avatar)
                 return response.data;
             })
 
@@ -58,7 +64,8 @@ export const AuthProvider = ({children}) => {
                 const token = response?.data?.access || null;
                 if (token) {
                     setAccessToken(token);
-                    getUserData();
+                    setUserName(jwt_decode(token).username)
+                    getUserData(token);
                 }
             })
             .then(() => setLoading(false))
