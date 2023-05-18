@@ -58,7 +58,6 @@ const User = ({width}) => {
 };
 
 const LoggedUserAvatar = (img, user, width) => {
-    console.log(img)
     return (
         <>
             <Avatar src={img} alt={user} radius="xl" size={20}/>
