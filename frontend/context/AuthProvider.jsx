@@ -49,7 +49,7 @@ export const AuthProvider = ({children}) => {
             .get("profile/", config)
             .then((response) => {
                 setUserName(response.data.username)
-                setAvatarURL(BASE_URL.slice(0, -5) + response.data.avatar)
+                setAvatarURL(response.data.avatar)
                 return response.data;
             })
 
