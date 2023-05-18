@@ -88,7 +88,7 @@ class CartModifyView(mixins.UpdateModelMixin,
         instance = self.get_object()
         deleted = 0
         for item in instance.items.all():
-            if item.id == kwargs['item_id']:
+            if item.product_id == kwargs['item_id']:
                 item.delete()
                 deleted += 1
         if deleted == 0:
