@@ -42,6 +42,8 @@ export const AuthProvider = ({children}) => {
         const response = axiosInstance
             .get("profile/")
             .then((response) => {
+                setUserName(response.username)
+                setUserName(BASE_URL.slice(0, -5) + response.avatar)
                 return response.data;
             })
 
@@ -56,10 +58,7 @@ export const AuthProvider = ({children}) => {
                 const token = response?.data?.access || null;
                 if (token) {
                     setAccessToken(token);
-                    
-                    const userData = await getUserData();
-                    setUserName(userData.username);
-                    setAvatarURL(BASE_URL.slice(0, -5) + userData.avatar);
+                    getUserData();
                 }
             })
             .then(() => setLoading(false))
