@@ -44,7 +44,7 @@ const ChangePassword = () => {
         }
 
         return await api
-            .put("profile/update_password/", JSON.stringify(body))
+            .put("profile/update_password/", body)
             .then((response) => {
                 notifications.show({
                     title: "Success",
@@ -54,6 +54,9 @@ const ChangePassword = () => {
             })
             .catch((error) => {
                 if (error.response.data) {
+                    if (error.response.data) {
+                        error.response.data.confirmNewPassword = error.response.data.old_password
+                    }
                     let data = myJSONformatter(error.response.data);
                     form.setErrors(data);
                 }
