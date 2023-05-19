@@ -59,7 +59,7 @@ export default function Pay({prevStep, items, address}) {
                 <Stack>
                     <Stack spacing='xs'>
                         <Title>Adress:</Title>
-                        <Text>{address.street} {address.number}/{address.apartment_number}</Text>
+                        <Text>{address.street} {address.number}{address.apartment_number ? '/' : ''}{address.apartment_number}</Text>
                         <Text>{address.city.postal_code} {address.city.name}</Text>
                         <Text>{address.city.country.name}</Text>
                     </Stack>

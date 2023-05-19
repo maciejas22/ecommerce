@@ -29,7 +29,6 @@ const Account = ({userState}) => {
         let formData = new FormData();
         Object.entries(data).forEach(([key, value]) => formData.append(key, value));
         file ? formData.set("avatar", file) : formData.delete("avatar");
-
         return await api
             .put("profile/", formData)
             .then((response) => {

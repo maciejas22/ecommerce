@@ -44,14 +44,14 @@ const Address = ({userState}) => {
                 },
             },
         };
-
+        
         return await api
-            .put("profile/", JSON.stringify(body), {})
+            .put("profile/", body, {})
             .then((response) => {
                 setUser(response.data);
                 notifications.show({
                     title: "Success",
-                    message: 'Profile updated successfully',
+                    message: 'Address updated successfully',
                     color: "green",
                 })
             })

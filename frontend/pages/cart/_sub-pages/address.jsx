@@ -56,11 +56,11 @@ const Address = ({address, setAddress, nextStep, prevStep}) => {
         };
 
         return await api
-            .put("order/get-cart/", JSON.stringify(body), {})
+            .put("order/get-cart/", body, {})
             .then((response) => {
                 notifications.show({
                     title: "Success",
-                    message: 'Profile updated successfully',
+                    message: 'Address updated successfully',
                     color: "green",
                 })
             })
