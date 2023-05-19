@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {Accordion, Container, Group, Image, Space, Stack, Text, Title} from "@mantine/core";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const dateConfig = {
     year: 'numeric',
     month: 'long',
@@ -63,13 +65,13 @@ export default function OrderHistory({history}) {
                             {order.items.map((product, index) => (
                                 windowWidth < 1080 ? (
                                     <Accordion.Panel key={product.id + 1}>
-                                        <ProductMobile id={product.product_id} img={product.product_thumbnail}
+                                        <ProductMobile id={product.product_id} img={BASE_URL.slice(0,-5) + product.product_thumbnail}
                                                        name={product.product}
                                                        quantity={product.quantity} price={product.product_price}/>
                                     </Accordion.Panel>
                                 ) : (
                                     <Accordion.Panel key={product.id + 1}>
-                                        <Product id={product.product_id} img={product.product_thumbnail}
+                                        <Product id={product.product_id} img={BASE_URL.slice(0,-5) + product.product_thumbnail}
                                                  name={product.product}
                                                  quantity={product.quantity} price={product.product_price}/>
                                     </Accordion.Panel>
