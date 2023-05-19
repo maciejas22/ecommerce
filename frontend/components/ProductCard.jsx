@@ -94,10 +94,10 @@ const ProductPrice = ({price, discount}) => {
         return (
             <Group spacing="xs">
                 <Text size="md" weight={500}>
-                    {price - discount}$
+                    {(price - discount).toFixed(2)}$
                 </Text>
                 <Text size="md" weight={500} c="dimmed" td="line-through">
-                    {price}$
+                    {Number(price).toFixed(2)}$
                 </Text>
                 <Text size="md" weight={500} c="green">
                     -{Math.round(100 - ((price - discount) / price) * 100)}%
