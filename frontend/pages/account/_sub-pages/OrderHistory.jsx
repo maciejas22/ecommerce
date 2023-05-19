@@ -63,13 +63,13 @@ export default function OrderHistory({history}) {
                             {order.items.map((product, index) => (
                                 windowWidth < 1080 ? (
                                     <Accordion.Panel key={product.id + 1}>
-                                        <ProductMobile id={product.id} img={product.thumbnail}
+                                        <ProductMobile id={product.product_id} img={product.product_thumbnail}
                                                        name={product.product}
                                                        quantity={product.quantity} price={product.product_price}/>
                                     </Accordion.Panel>
                                 ) : (
                                     <Accordion.Panel key={product.id + 1}>
-                                        <Product id={product.id} img={product.thumbnail}
+                                        <Product id={product.product_id} img={product.product_thumbnail}
                                                  name={product.product}
                                                  quantity={product.quantity} price={product.product_price}/>
                                     </Accordion.Panel>
