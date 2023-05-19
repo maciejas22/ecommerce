@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react";
 
 import Link from "next/link";
 
-import {Burger, Button, Container, Divider, Drawer, Flex, Group, Header, Indicator,} from "@mantine/core";
+import {Burger, Button, Container, Divider, Drawer, Flex, Group, Header, Indicator, Text,} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 
 import {IconShoppingCart} from "@tabler/icons-react";
@@ -33,7 +33,13 @@ const MyHeader = () => {
             <Header mb="xs" height={"116px"}>
                 <Container size="xl" px="0">
                     <Flex align="center" justify="space-between" py="sm" px="md">
-                        <SearchBar widthPercentage={"40%"} padding={"0"}/>
+                        <Link href="/">
+                            <Group spacing={0}>
+                                <IconShoppingCart color='#339AF0' size={26}/>
+                                <Text color='#339AF0' size='lg' weight={700}>MyShop</Text>
+                            </Group>
+                        </Link>
+                        <SearchBar widthPercentage={"70%"} padding={"0"}/>
 
                         <Group>
                             <Link href="/cart/">
@@ -74,9 +80,19 @@ const MyHeader = () => {
                     justify="space-between"
                     py="sm"
                     px="md"
-                    width={"100%"}
                 >
-                    <Burger opened={opened} onClick={open}/>
+                    <Burger opened={opened} onClick={open} color='#339AF0'/>
+                    <div style={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                    }}>
+                        <Link href="/">
+                            <Group spacing={0}>
+                                <IconShoppingCart color='#339AF0' size={26}/>
+                                <Text color='#339AF0' size='lg' weight={700}>MyShop</Text>
+                            </Group>
+                        </Link>
+                    </div>
                     <Group>
                         <Link href="/cart/">
                             <Indicator inline label={items.reduce((acc, item) => acc + item.quantity, 0)} size={16}>

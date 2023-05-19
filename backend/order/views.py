@@ -10,7 +10,12 @@ class CartList(generics.ListCreateAPIView):
     serializer_class = CartSerializer
 
     def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
+        queryset = Cart.objects.filter(user=self.request.user)
+        if queryset.exists():
+            first_item = queryset.first()
+            if first_item.status == 'UNSUBMITTED':
+                return queryset[1:]
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
