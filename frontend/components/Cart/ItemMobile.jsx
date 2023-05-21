@@ -61,7 +61,7 @@ export default function ItemMobile({
                 flex: 1,
                 paddingLeft: 16,
             }}>
-                <Group position="apart">
+                <Group position="apart" noWrap>
                     <Text>{name}</Text>
                     <Button size='md' variant='outline' onClick={() => handleDelete(id)}>
                         <IconTrash size={22} stroke={1.5}/>
