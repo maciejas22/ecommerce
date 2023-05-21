@@ -22,7 +22,7 @@ Web based e-commerce app that allows users to browser and purchase audiovisual e
 
 
 ## Screenshots:
-* **Home Page View:** <img src="/ScreenShots/home_page.jpeg" alt="Cart View" title="Cart view">
-* **Product Catalog View:** <img src="/ScreenShots/products.jpeg" alt="Cart View" title="Cart view">
+* **Home Page View:** <img src="/ScreenShots/home_page.jpeg" alt="Home Page View" title="Home Page View">
+* **Product Catalog View:** <img src="/ScreenShots/products.jpeg" alt="Product Catalog View" title="Product Catalog View">
 * **Cart View:** <img src="/ScreenShots/cart_view.jpeg" alt="Cart View" title="Cart view">
-* **Finalize Order View:** <img src="/ScreenShots/finalize_order.png" alt="Cart View" title="Cart view">
+* **Finalize Order View:** <img src="/ScreenShots/finalize_order.png" alt="Finalize Order View" title="Finalize Order View">
