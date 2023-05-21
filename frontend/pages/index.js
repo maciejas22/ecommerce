@@ -4,7 +4,7 @@ import FiveItemCarousel from "@/components/FiveItemCarousel";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export async function getStaticProps({params}) {
+export async function getServerSideProps({params}) {
   return await axios
         .get(`${BASE_URL}newest/`)
         .then((response) => {

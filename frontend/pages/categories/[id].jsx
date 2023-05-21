@@ -15,16 +15,16 @@ const categories = [
     {name: "Washing machines", slug: "washing-machines"},
 ];
 
-export async function getStaticPaths() {
-    const paths = categories.map((cat) => ({params: {id: cat.slug}}));
-
-    return {
-        paths,
-        fallback: false,
-    };
-}
-
-export async function getStaticProps({params}) {
+export async function getServerSideProps({params}) {
+    const slug = params.id;
+    const validPath = categories.some(cat => cat.slug === slug);
+    
+    if(!validPath) {
+        return {
+            notFound: true,
+        }
+    }
+    
     return await axios
         .get(`${BASE_URL}${params.id}/`)
         .then((response) => {
