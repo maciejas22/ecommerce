@@ -1,11 +1,10 @@
 import {Button, Container, Flex, SimpleGrid, Space, TextInput, Title,} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {notifications} from "@mantine/notifications";
 import useAxios from "@/utils/useAxios";
 
 const Address = ({address, setAddress, nextStep, prevStep}) => {
     const api = useAxios();
-    
+
     const form = useForm({
         initialValues: {
             address: {
@@ -21,7 +20,7 @@ const Address = ({address, setAddress, nextStep, prevStep}) => {
                 },
             },
         },
-        
+
         validate: {
             address: {
                 street: (value) => (value.length < 2 ? 'Must have at least 2 characters' : null),
@@ -36,7 +35,7 @@ const Address = ({address, setAddress, nextStep, prevStep}) => {
             },
         },
     });
-    
+
     const updateAddress = async (form, values) => {
         const body = {
             address: {
@@ -57,13 +56,6 @@ const Address = ({address, setAddress, nextStep, prevStep}) => {
 
         return await api
             .put("order/get-cart/", body, {})
-            .then((response) => {
-                notifications.show({
-                    title: "Success",
-                    message: 'Address updated successfully',
-                    color: "green",
-                })
-            })
             .catch((error) => {
                 if (error.response.data) {
                     let data = myJSONformatter(error.response.data);

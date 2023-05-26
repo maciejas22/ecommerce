@@ -77,6 +77,7 @@ export const CartProvider = ({children}) => {
         items: items,
 
         getHistory: getHistory,
+        setStatus: setStatus,
         getCart: getCart,
         addItem: addItem,
         updateQuantity: updateQuantity,

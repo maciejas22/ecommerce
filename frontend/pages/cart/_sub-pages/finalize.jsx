@@ -47,10 +47,9 @@ export default function Pay({prevStep, items, address}) {
             return acc + (item.product_price - item.product_discount) * item.quantity
         },
         0)
-
+    if (isPending) return <MyLoader/>
     return (
         <>
-            {isPending ? <MyLoader/> : null}
             <SimpleGrid
                 columns={1}
                 spacing="md"

@@ -2,6 +2,7 @@ import {createContext, useEffect, useState} from "react";
 import {notifications} from '@mantine/notifications';
 import {useRouter} from "next/router";
 import jwt_decode from "jwt-decode";
+import {myJSONformatter} from "@/utils/myJSONformatter";
 import axios from "axios";
 
 import MyLoader from "@/components/MyLoader";
@@ -22,12 +23,12 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     response => response,
     error => {
-        console.log(error);
         notifications.show({
             title: "Error",
             message: error?.response?.data?.detail,
             color: "red",
         })
+        return Promise.reject(error);
     }
 )
 
@@ -44,13 +45,16 @@ export const AuthProvider = ({children}) => {
                 Authorization: `Bearer ${token}`,
             },
         };
-        
+
         const response = axiosInstance
             .get("profile/", config)
             .then((response) => {
                 setUserName(response.data.username)
                 setAvatarURL(response.data.avatar)
                 return response.data;
+            })
+            .catch((error) => {
+                return Promise.resolve({error: "An error occurred"});
             })
 
         return response;
@@ -68,6 +72,9 @@ export const AuthProvider = ({children}) => {
                     getUserData(token);
                 }
             })
+            .catch((error) => {
+                return Promise.resolve({error: "An error occurred"});
+            })
             .then(() => setLoading(false))
     }, [])
 
@@ -83,13 +90,14 @@ export const AuthProvider = ({children}) => {
         await axiosInstance
             .post("/profile/", JSON.stringify(body))
             .then((response) => {
-                router.push("/account/login");
+                if (response.status === 201)
+                    router.push("/account/login");
             })
             .catch((error) => {
                 if (error.response.data.password) {
                     error.response.data.confirmPassword = error.response.data.password;
                 }
-                form.setErrors(error.response.data);
+                form.setErrors(myJSONformatter(error.response.data));
             });
     };
 
