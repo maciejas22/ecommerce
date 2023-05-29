@@ -1,11 +1,14 @@
 import {createContext, useState} from "react";
 
 import useAxios from "@/utils/useAxios";
+import {useRouter} from "next/router";
+import {notifications} from "@mantine/notifications";
 
 const CartContext = createContext();
 export default CartContext;
 
 export const CartProvider = ({children}) => {
+    const router = useRouter();
     const api = useAxios();
     const [orderID, setOrderID] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -69,8 +72,21 @@ export const CartProvider = ({children}) => {
         const body = {
             "status": status
         }
-        return await api
-            .post(`order/update-cart/${orderID}/`, body)
+        await api
+            .put(`order/update-cart/${orderID}/`, body)
+            .then((response) => {
+                    if (response.status === 200) {
+                        router.push("/");
+                        getCart();
+                        notifications.show({
+                            title: "Success",
+                            message: 'Purchase completed successfully',
+                            color: "green",
+                        })
+                    }
+                    return response.data;
+                }
+            );
     };
 
     const contextData = {

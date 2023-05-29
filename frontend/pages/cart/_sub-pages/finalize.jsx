@@ -18,7 +18,7 @@ function createOrder(data, actions, amount) {
 }
 
 function onApprove(data, actions, setStatus) {
-    setStatus("PENDING")
+    setStatus("PENDING");
     return actions.order.capture();
 }
 

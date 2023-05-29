@@ -37,6 +37,8 @@ class CartDetail(mixins.RetrieveModelMixin,
 
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
+        if instance.status != 'UNSUBMITTED':
+            instance = None
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
